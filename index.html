@@ -1,211 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Egypt Adventure Countdown</title>
-  <style>
-    /* Page Layout */
-    body {
-      font-family: 'Trebuchet MS', sans-serif;
-      margin: 0; padding: 0;
-      background: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-      background-blend-mode: overlay;
-      background-color: rgba(40,30,0,0.65);
-      color: #3a2e0f;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Egypt Adventure Countdown</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    background-color: rgba(40, 30, 0, 0.65);
+    background-blend-mode: overlay;
+    color: #1c1c1e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 15px;
+  }
+
+  /* Container with iOS 16 style blur and rounded corners */
+  .overlay {
+    background: rgba(255 255 255 / 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 28px;
+    padding: 30px 40px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow:
+      0 8px 24px rgb(0 0 0 / 0.12),
+      0 0 0 1px rgb(0 0 0 / 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin-bottom: 12px;
+    color: #ff9500;
+    text-shadow: 0 1px 3px rgba(255 149 0 / 0.3);
+  }
+
+  /* Countdown */
+  #countdown-container {
+    background: #ffcc33;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 650px;
+    padding: 32px 0;
+    box-shadow:
+      0 12px 24px rgb(255 204 51 / 0.5);
+    margin: 30px 0 50px 0;
+    text-align: center;
+  }
+  #js-countdown {
+    font-weight: 900;
+    font-size: 4.8rem;
+    color: #1a237e;
+    letter-spacing: 5px;
+    user-select: none;
+    margin: 0;
+    font-feature-settings: "tnum";
+  }
+
+  /* Music Controls */
+  #music-controls {
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+  #music-controls button {
+    background: #ffcc33;
+    border: none;
+    border-radius: 20px;
+    padding: 14px 28px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #3e2723;
+    box-shadow:
+      0 8px 12px rgb(255 204 51 / 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1;
+  }
+  #music-controls button:hover:not(:disabled) {
+    background-color: #d4a00d;
+  }
+  #music-controls button:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  /* Game Section */
+  .game-section {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255 255 255 / 0.9);
+    border-radius: 24px;
+    box-shadow:
+      0 8px 20px rgb(0 0 0 / 0.1);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game-section h2 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #bf360c;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #4e342e;
+  }
+
+  input[type="text"] {
+    font-size: 1rem;
+    padding: 10px 14px;
+    border-radius: 18px;
+    border: 1.5px solid #d7ccc8;
+    margin: 12px 0 20px 0;
+    width: 100%;
+    max-width: 260px;
+    transition: border-color 0.3s;
+    outline-offset: 2px;
+  }
+  input[type="text"]:focus {
+    border-color: #ff6f00;
+    outline: none;
+  }
+
+  .status {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #d84315;
+    margin: 10px 0 18px 0;
+  }
+
+  #game-area {
+    width: 100%;
+    height: 280px;
+    background-color: #fff8e1;
+    border-radius: 22px;
+    box-shadow:
+      inset 0 0 12px #ffd54f;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+    user-select: none;
+  }
+
+  #camel {
+    font-size: 3.2rem;
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 4px rgb(139 111 0 / 0.7);
+  }
+  #camel:focus {
+    outline: 2.5px solid #ff6f00;
+    outline-offset: 3px;
+  }
+
+  #start-btn {
+    background: #ffcc33;
+    border: none;
+    border-radius: 24px;
+    padding: 14px 28px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #3e2723;
+    cursor: pointer;
+    box-shadow:
+      0 8px 15px rgb(255 204 51 / 0.6);
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 260px;
+  }
+  #start-btn:hover {
+    background-color: #d4a00d;
+  }
+
+  /* Leaderboard table */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    font-size: 1rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 14px 18px;
+    color: #4e342e;
+  }
+  thead th {
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: #ffe082;
+    border-radius: 14px 14px 0 0;
+    box-shadow:
+      inset 0 -1px 0 rgb(0 0 0 / 0.1);
+  }
+  tbody tr {
+    background: #fff9c4;
+    border-radius: 14px;
+    box-shadow:
+      0 2px 5px rgb(0 0 0 / 0.05);
+  }
+  tbody tr + tr {
+    margin-top: 10px;
+  }
+  tbody td {
+    border-top: 1px solid #fff176;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    user-select: none;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 480px) {
+    #js-countdown {
+      font-size: 3.2rem;
+    }
+    #countdown-container {
+      padding: 28px 0;
     }
     .overlay {
-      background-color: rgba(255,255,255,0.9);
-      max-width: 700px;
-      margin: 30px auto;
-      border-radius: 20px;
-      padding: 30px 20px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      flex: 1;
+      padding: 24px 20px;
     }
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: #b77f1a;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-      margin-bottom: 10px;
-    }
-
-    /*  JavaScript Countdown */
-    #countdown-container {
-      margin: 40px auto 60px auto;
-      width: 100%;
-      max-width: 650px;
-      background: #f5c542;
-      border-radius: 30px;
-      padding: 40px 0;
-      box-shadow: 0 15px 30px rgba(181,133,8,0.8);
-      font-weight: 900;
-    }
-    #js-countdown {
-      font-size: 4.5rem;
-      font-weight: 900;
-      color: #1d3557;
-      letter-spacing: 4px;
-      user-select: none;
-      margin: 0;
-    }
-    @media (max-width: 480px) {
-      #js-countdown {
-        font-size: 3rem;
-      }
-      #countdown-container {
-        padding: 30px 0;
-      }
-    }
-
-    /* Music Controls */
-    #music-controls {
-      margin-bottom: 25px;
-    }
-    #music-controls button {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      background-color: #f5c542;
-      font-weight: bold;
-      font-size: 1rem;
-      color: #2c2c2c;
-      box-shadow: 0 5px 10px rgba(181,133,8,0.6);
-      margin-right: 15px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    #music-controls button:hover {
-      background-color: #d1a72b;
-    }
-
-    /* Game Section Styles */
-    .game-section {
-      width: 100%;
-      max-width: 480px;
-      background: #ffe9c6;
-      border: 3px dashed #aa7d00;
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: inset 0 0 15px #d4af37;
-      margin-bottom: 50px;
-    }
-    .game-section h2 {
-      font-size: 1.5rem;
-      color: #9b6f00;
-      font-weight: 700;
-      margin-top: 0; margin-bottom: 15px;
-    }
-    label {
-      font-weight: 600;
-      font-size: 1rem;
-    }
-    input[type="text"] {
-      padding: 8px;
-      margin: 12px 0 20px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      width: 100%;
-      max-width: 240px;
-    }
-    .status {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #b76d00;
-      margin: 14px 0;
-    }
-    #game-area {
-      width: 100%;
-      height: 280px;
-      background-color: #fff2cc;
-      border-radius: 10px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: inset 0 0 8px #d4af37;
-      margin-bottom: 20px;
-    }
-    #camel {
-      font-size: 2.8rem;
-      position: absolute;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-shadow: 1px 1px 3px #8b6f00cc;
-    }
-    #start-btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      background-color: #f5c542;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #2c2c2c;
-      cursor: pointer;
-      box-shadow: 0 5px 10px rgba(181,133,8,0.6);
-      transition: background-color 0.3s;
-      margin-bottom: 20px;
-    }
-    #start-btn:hover {
-      background-color: #d1a72b;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 1rem;
-      margin-top: 10px;
-    }
-    th, td {
-      padding: 10px;
-      border: 2px solid #ccc;
-      color: #5a3e00;
-    }
-    th {
-      background-color: #f5c542;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background-color: #222;
-      color: #fff;
-      font-size: 0.9rem;
-      margin-top: 30px;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <div class="overlay">
+  <div class="overlay" role="main" aria-label="Egypt Adventure Countdown">
     <h1>🇪🇬 Countdown to My Egypt Adventure 🐪</h1>
 
-    <div id="countdown-container">
+    <div id="countdown-container" aria-live="polite">
       <p id="js-countdown">Loading...</p>
     </div>
 
     <div id="music-controls">
-      <button id="play-music-btn">▶️ Play Music</button>
-      <button id="toggle-music-btn" disabled>🔈 Mute Music</button>
+      <button id="play-music-btn" aria-label="Play music">▶️ Play Music</button>
+      <button id="toggle-music-btn" aria-label="Mute music" disabled>🔈 Mute Music</button>
     </div>
 
     <div class="game-section">
       <h2>🐫 Catch the Camel!</h2>
-      <label for="username">Enter your name:</label><br>
-      <input type="text" id="username" placeholder="Your name" autocomplete="off">
-      <button id="start-btn">🎮 Start Game</button>
-      <p class="status">Lives: <span id="lives">3</span> | Score: <span id="score">0</span></p>
-      <div id="game-area">
-        <div id="camel" role="button" tabindex="0">🐫</div>
+      <label for="username">Enter your name:</label><br />
+      <input
+        type="text"
+        id="username"
+        placeholder="Your name"
+        autocomplete="off"
+        aria-required="true"
+      />
+      <button id="start-btn" aria-label="Start game">🎮 Start Game</button>
+      <p class="status" aria-live="polite">Lives: <span id="lives">3</span> | Score: <span id="score">0</span></p>
+      <div id="game-area" aria-label="Game play area" role="region" tabindex="0">
+        <div id="camel" role="button" tabindex="0" aria-pressed="false">🐫</div>
       </div>
       <h3>🏆 Leaderboard</h3>
-      <table id="leaderboard">
-        <thead><tr><th>Username</th><th>Score</th></tr></thead>
+      <table id="leaderboard" aria-label="Game leaderboard">
+        <thead>
+          <tr><th>Username</th><th>Score</th></tr>
+        </thead>
         <tbody id="leaderboard-body"></tbody>
       </table>
     </div>
@@ -214,7 +295,7 @@
   <footer>Made by Shravan</footer>
 
   <script>
-    // JavaScript Countdown Logic
+    // Countdown Logic
     const countdownEl = document.getElementById('js-countdown');
     const targetDate = new Date('2025-09-01T00:00:00Z').getTime();
 
@@ -243,7 +324,7 @@
     const cdInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Game and music logic
+    // Game & leaderboard logic
     const camel = document.getElementById('camel');
     const livesEl = document.getElementById('lives');
     const scoreEl = document.getElementById('score');
@@ -254,8 +335,28 @@
     const playMusicBtn = document.getElementById('play-music-btn');
     const toggleMusicBtn = document.getElementById('toggle-music-btn');
 
-    let score = 0, lives = 3, gameStarted = false, moveInterval;
-    const leaderboard = {};
+    let score = 0,
+      lives = 3,
+      gameStarted = false,
+      moveInterval;
+
+    // Load leaderboard from localStorage or init empty
+    let leaderboard = JSON.parse(localStorage.getItem('camelLeaderboard')) || {};
+
+    function saveLeaderboard() {
+      localStorage.setItem('camelLeaderboard', JSON.stringify(leaderboard));
+    }
+
+    function updateLeaderboardUI() {
+      leaderboardBody.innerHTML = '';
+      Object.entries(leaderboard)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([user, sc]) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${user}</td><td>${sc}</td>`;
+          leaderboardBody.appendChild(row);
+        });
+    }
 
     function moveCamel(speed = 2000) {
       if (!gameStarted || lives <= 0) return;
@@ -267,32 +368,28 @@
       camel.style.top = y + 'px';
     }
 
-    function updateLeaderboard(user, sc) {
-      leaderboard[user] = Math.max(leaderboard[user] || 0, sc);
-      leaderboardBody.innerHTML = '';
-      Object.entries(leaderboard)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([u, s]) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${u}</td><td>${s}</td>`;
-          leaderboardBody.appendChild(row);
-        });
-    }
-
     camel.addEventListener('click', () => {
       if (!gameStarted || lives <= 0) return;
       score++;
       scoreEl.textContent = score;
+
       const user = usernameInput.value.trim() || 'Anonymous';
-      updateLeaderboard(user, score);
+      // Update leaderboard if better score
+      if (!leaderboard[user] || leaderboard[user] < score) {
+        leaderboard[user] = score;
+        saveLeaderboard();
+        updateLeaderboardUI();
+      }
+
       const speed = Math.max(500, 2000 - score * 100);
       moveCamel(speed);
+
       clearInterval(moveInterval);
       moveInterval = setInterval(() => {
         lives--;
         livesEl.textContent = lives;
         if (lives <= 0) {
-          alert('Game Over! Score: ' + score);
+          alert(`Game Over! Score: ${score}`);
           gameStarted = false;
           clearInterval(moveInterval);
           camel.style.display = 'none';
@@ -303,19 +400,28 @@
     });
 
     startBtn.addEventListener('click', () => {
-      score = 0; lives = 3;
+      if (!usernameInput.value.trim()) {
+        alert('Please enter your name to start.');
+        usernameInput.focus();
+        return;
+      }
+
+      score = 0;
+      lives = 3;
       scoreEl.textContent = score;
       livesEl.textContent = lives;
       gameStarted = true;
       camel.style.display = 'block';
+
       const speed = 2000;
       moveCamel(speed);
+
       clearInterval(moveInterval);
       moveInterval = setInterval(() => {
         lives--;
         livesEl.textContent = lives;
         if (lives <= 0) {
-          alert('Game Over! Score: ' + score);
+          alert(`Game Over! Score: ${score}`);
           gameStarted = false;
           clearInterval(moveInterval);
           camel.style.display = 'none';
@@ -325,13 +431,22 @@
       }, speed);
     });
 
-    const bg = new Audio('https://actions.google.com/sounds/v1/ambiences/desert_wind.mp3');
-    bg.loop = true; bg.volume = 0.3;
+    // Init leaderboard UI on page load
+    updateLeaderboardUI();
+
+    // Music setup
+    // NOTE: You need to put your music file locally or in a relative path in your project.
+    // Replace 'local_music.mp3' with your actual music filename and path.
+    const bg = new Audio('local_music.mp3');
+    bg.loop = true;
+    bg.volume = 0.3;
+
     playMusicBtn.addEventListener('click', () => {
       bg.play();
       playMusicBtn.disabled = true;
       toggleMusicBtn.disabled = false;
     });
+
     toggleMusicBtn.addEventListener('click', () => {
       if (bg.paused) {
         bg.play();
@@ -344,3 +459,4 @@
   </script>
 </body>
 </html>
+
