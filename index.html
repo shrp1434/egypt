@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Egypt Adventure Countdown</title>
+  <style>
+    /* Page Layout */
+    body {
+      font-family: 'Trebuchet MS', sans-serif;
+      margin: 0; padding: 0;
+      background: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+      background-blend-mode: overlay;
+      background-color: rgba(40,30,0,0.65);
+      color: #3a2e0f;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .overlay {
+      background-color: rgba(255,255,255,0.9);
+      max-width: 700px;
+      margin: 30px auto;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+    }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #b77f1a;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    /*  JavaScript Countdown */
+    #countdown-container {
+      margin: 40px auto 60px auto;
+      width: 100%;
+      max-width: 650px;
+      background: #f5c542;
+      border-radius: 30px;
+      padding: 40px 0;
+      box-shadow: 0 15px 30px rgba(181,133,8,0.8);
+      font-weight: 900;
+    }
+    #js-countdown {
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: #1d3557;
+      letter-spacing: 4px;
+      user-select: none;
+      margin: 0;
+    }
+    @media (max-width: 480px) {
+      #js-countdown {
+        font-size: 3rem;
+      }
+      #countdown-container {
+        padding: 30px 0;
+      }
+    }
+
+    /* Music Controls */
+    #music-controls {
+      margin-bottom: 25px;
+    }
+    #music-controls button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f5c542;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #2c2c2c;
+      box-shadow: 0 5px 10px rgba(181,133,8,0.6);
+      margin-right: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #music-controls button:hover {
+      background-color: #d1a72b;
+    }
+
+    /* Game Section Styles */
+    .game-section {
+      width: 100%;
+      max-width: 480px;
+      background: #ffe9c6;
+      border: 3px dashed #aa7d00;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: inset 0 0 15px #d4af37;
+      margin-bottom: 50px;
+    }
+    .game-section h2 {
+      font-size: 1.5rem;
+      color: #9b6f00;
+      font-weight: 700;
+      margin-top: 0; margin-bottom: 15px;
+    }
+    label {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    input[type="text"] {
+      padding: 8px;
+      margin: 12px 0 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 240px;
+    }
+    .status {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #b76d00;
+      margin: 14px 0;
+    }
+    #game-area {
+      width: 100%;
+      height: 280px;
+      background-color: #fff2cc;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 8px #d4af37;
+      margin-bottom: 20px;
+    }
+    #camel {
+      font-size: 2.8rem;
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-shadow: 1px 1px 3px #8b6f00cc;
+    }
+    #start-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f5c542;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #2c2c2c;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(181,133,8,0.6);
+      transition: background-color 0.3s;
+      margin-bottom: 20px;
+    }
+    #start-btn:hover {
+      background-color: #d1a72b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 2px solid #ccc;
+      color: #5a3e00;
+    }
+    th {
+      background-color: #f5c542;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #222;
+      color: #fff;
+      font-size: 0.9rem;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>🇪🇬 Countdown to My Egypt Adventure 🐪</h1>
+
+    <div id="countdown-container">
+      <p id="js-countdown">Loading...</p>
+    </div>
+
+    <div id="music-controls">
+      <button id="play-music-btn">▶️ Play Music</button>
+      <button id="toggle-music-btn" disabled>🔈 Mute Music</button>
+    </div>
+
+    <div class="game-section">
+      <h2>🐫 Catch the Camel!</h2>
+      <label for="username">Enter your name:</label><br>
+      <input type="text" id="username" placeholder="Your name" autocomplete="off">
+      <button id="start-btn">🎮 Start Game</button>
+      <p class="status">Lives: <span id="lives">3</span> | Score: <span id="score">0</span></p>
+      <div id="game-area">
+        <div id="camel" role="button" tabindex="0">🐫</div>
+      </div>
+      <h3>🏆 Leaderboard</h3>
+      <table id="leaderboard">
+        <thead><tr><th>Username</th><th>Score</th></tr></thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>Made by Shravan</footer>
+
+  <script>
+    // JavaScript Countdown Logic
+    const countdownEl = document.getElementById('js-countdown');
+    const targetDate = new Date('2025-09-01T00:00:00Z').getTime();
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdownEl.textContent = 'Your adventure is here!';
+        clearInterval(cdInterval);
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      countdownEl.textContent =
+        (days ? days + 'd ' : '') +
+        hours.toString().padStart(2, '0') + 'h ' +
+        mins.toString().padStart(2, '0') + 'm ' +
+        secs.toString().padStart(2, '0') + 's';
+    }
+
+    const cdInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Game and music logic
+    const camel = document.getElementById('camel');
+    const livesEl = document.getElementById('lives');
+    const scoreEl = document.getElementById('score');
+    const leaderboardBody = document.getElementById('leaderboard-body');
+    const usernameInput = document.getElementById('username');
+    const gameArea = document.getElementById('game-area');
+    const startBtn = document.getElementById('start-btn');
+    const playMusicBtn = document.getElementById('play-music-btn');
+    const toggleMusicBtn = document.getElementById('toggle-music-btn');
+
+    let score = 0, lives = 3, gameStarted = false, moveInterval;
+    const leaderboard = {};
+
+    function moveCamel(speed = 2000) {
+      if (!gameStarted || lives <= 0) return;
+      const maxX = gameArea.clientWidth - camel.offsetWidth;
+      const maxY = gameArea.clientHeight - camel.offsetHeight;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      camel.style.left = x + 'px';
+      camel.style.top = y + 'px';
+    }
+
+    function updateLeaderboard(user, sc) {
+      leaderboard[user] = Math.max(leaderboard[user] || 0, sc);
+      leaderboardBody.innerHTML = '';
+      Object.entries(leaderboard)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([u, s]) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${u}</td><td>${s}</td>`;
+          leaderboardBody.appendChild(row);
+        });
+    }
+
+    camel.addEventListener('click', () => {
+      if (!gameStarted || lives <= 0) return;
+      score++;
+      scoreEl.textContent = score;
+      const user = usernameInput.value.trim() || 'Anonymous';
+      updateLeaderboard(user, score);
+      const speed = Math.max(500, 2000 - score * 100);
+      moveCamel(speed);
+      clearInterval(moveInterval);
+      moveInterval = setInterval(() => {
+        lives--;
+        livesEl.textContent = lives;
+        if (lives <= 0) {
+          alert('Game Over! Score: ' + score);
+          gameStarted = false;
+          clearInterval(moveInterval);
+          camel.style.display = 'none';
+          return;
+        }
+        moveCamel(speed);
+      }, speed);
+    });
+
+    startBtn.addEventListener('click', () => {
+      score = 0; lives = 3;
+      scoreEl.textContent = score;
+      livesEl.textContent = lives;
+      gameStarted = true;
+      camel.style.display = 'block';
+      const speed = 2000;
+      moveCamel(speed);
+      clearInterval(moveInterval);
+      moveInterval = setInterval(() => {
+        lives--;
+        livesEl.textContent = lives;
+        if (lives <= 0) {
+          alert('Game Over! Score: ' + score);
+          gameStarted = false;
+          clearInterval(moveInterval);
+          camel.style.display = 'none';
+          return;
+        }
+        moveCamel(speed);
+      }, speed);
+    });
+
+    const bg = new Audio('https://actions.google.com/sounds/v1/ambiences/desert_wind.mp3');
+    bg.loop = true; bg.volume = 0.3;
+    playMusicBtn.addEventListener('click', () => {
+      bg.play();
+      playMusicBtn.disabled = true;
+      toggleMusicBtn.disabled = false;
+    });
+    toggleMusicBtn.addEventListener('click', () => {
+      if (bg.paused) {
+        bg.play();
+        toggleMusicBtn.textContent = '🔈 Mute Music';
+      } else {
+        bg.pause();
+        toggleMusicBtn.textContent = '🔊 Play Music';
+      }
+    });
+  </script>
+</body>
+</html>
